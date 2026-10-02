@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="SOMA Casa: muebles, luz y objetos para vivir despacio. Tienda ficticia de demostración."
+    />
+    <title>SOMA Casa · Habitar lo sencillo</title>
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script defer src="js/config.js"></script>
+    <script defer src="js/products.js"></script>
+    <script defer src="js/app.js"></script>
+    <script defer src="js/sitemap.js"></script>
+    <script defer src="js/tracking.js"></script>
+  </head>
+  <body data-page="home">
+    <a href="#main" class="skip-link">Saltar al contenido</a>
+    <div id="site-header"></div>
+    <main id="main" class="wrap">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <span class="eyebrow">Colección 01 / La calma de casa</span>
+          <h1 id="hero-title">Menos ruido.<br />Más <em>hogar.</em></h1>
+          <p>
+            Objetos que importan. Materiales que se sienten. Un espacio que se
+            parece a ti.
+          </p>
+          <a class="button" href="#coleccion" data-track-hero
+            >Descubre la colección <span aria-hidden="true">↗</span></a
+          ><span class="hero-note">DISEÑO PARA VIVIR, SIN PRISA.</span>
+        </div>
+        <div class="hero-art">
+          <img
+            src="assets/images/hero.svg"
+            alt="Ilustración de un rincón cálido con sillón de lino, mesa de roble y jarrón de cerámica"
+            width="1000"
+            height="800"
+            fetchpriority="high"
+          /><a
+            href="producto.html?id=sillon-alba"
+            class="hero-art-label"
+            data-product-link="sillon-alba"
+            ><strong>Un rincón para quedarte ↗</strong>Conoce el sillón Alba</a
+          >
+        </div>
+      </section>
+      <div class="service-strip">
+        <span data-icon="truck">Envío gratis desde 100 €</span
+        ><span data-icon="return">30 días para cambiar de idea</span
+        ><span data-icon="leaf">Pequeños detalles, grandes espacios</span>
+      </div>
+      <section
+        id="coleccion"
+        class="collection"
+        aria-labelledby="collection-title"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Elegidos con intención</p>
+            <h2 id="collection-title">Tus próximos favoritos.</h2>
+          </div>
+          <p>Seis piezas. Infinitas formas de hacerlas tuyas.</p>
+        </div>
+        <div class="filter-row">
+          <div class="filters" aria-label="Filtrar productos">
+            <button class="filter" data-filter="Todos" aria-pressed="true">
+              Todo</button
+            ><button
+              class="filter"
+              data-filter="Mobiliario"
+              aria-pressed="false"
+            >
+              Mobiliario</button
+            ><button
+              class="filter"
+              data-filter="Iluminación"
+              aria-pressed="false"
+            >
+              Iluminación</button
+            ><button
+              class="filter"
+              data-filter="Decoración"
+              aria-pressed="false"
+            >
+              Decoración</button
+            ><button class="filter" data-filter="Textil" aria-pressed="false">
+              Textil
+            </button>
+          </div>
+          <span class="product-count" id="product-count" aria-live="polite"
+            >6 productos</span
+          >
+        </div>
+        <div class="product-grid" id="product-grid"></div>
+      </section>
+      <section class="philosophy" id="filosofia">
+        <h2>Lo cotidiano también<br />puede ser extraordinario.</h2>
+        <p>
+          Creemos en los espacios vividos, en las texturas honestas y en esas
+          piezas que te acompañan. SOMA es una invitación a rodearte de lo que
+          te hace sentir en casa.
+        </p>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <noscript
+      ><p>
+        Activa JavaScript para ver el catálogo y usar esta tienda de
+        demostración.
+      </p></noscript
+    >
+  </body>
+</html>

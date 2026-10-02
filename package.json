@@ -1,0 +1,8 @@
+{
+  "name": "soma-casa-data360-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tienda estática para prácticas de Salesforce Data 360. Node solo se usa para pruebas opcionales.",
+  "scripts": { "test": "node --test tests/site.test.cjs" },
+  "devDependencies": { "jsdom": "26.1.0" }
+}
