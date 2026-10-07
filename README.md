@@ -1,170 +1,114 @@
 # SOMA Casa · Retail demo + Salesforce Data 360
 
-Tienda ficticia para prácticas: **Home, Login y Detalle de Producto**. HTML, CSS y JavaScript nativos, sin framework, dependencias de ejecución, compilación ni backend. Incluye seis productos, tres ilustraciones SVG locales por producto, banner, filtros, bolsa simulada y un visor de eventos.
+Tienda ficticia para prácticas: **Home, Login y Detalle de Producto**. HTML, CSS y JavaScript nativos, sin compilación ni backend. Incluye seis productos, tres ilustraciones SVG locales por producto, banner, filtros y bolsa simulada.
 
 ## Abrir sin servidor
 
-1. Descarga y descomprime **toda** la carpeta.
+1. Descarga y descomprime toda la carpeta.
 2. Abre `index.html` en un navegador moderno.
-3. Acepta la medición de la demo, navega y abre **Ver actividad** en el pie de página.
-4. Entra en **Mi espacio** y utiliza, por ejemplo, `alumno@example.com`. La contraseña es opcional, no se autentica, no se almacena y no se envía.
+3. Navega por los productos y entra en **Mi espacio** con un email de prueba.
 
-Todos los recursos visuales son locales. No se usan `fetch()` para cargar archivos, módulos ES, fuentes externas, CDNs de diseño ni rutas absolutas. La tienda funciona sin conexión.
+La contraseña es opcional: no se autentica, no se almacena ni se envía por el código de la tienda. Se limpia al enviar el formulario. No utilices credenciales reales.
 
-**Con `file://` los eventos se simulan siempre.** No se intenta cargar el SDK remoto: no se puede garantizar un origen HTTP ni las cookies de identidad del SDK con archivos locales. La simulación ejecuta el mismo sitemap; no es una recepción real en Salesforce ni una implementación del SDK. Para enviar datos reales sin mantener un servidor, utiliza GitHub Pages.
+Los recursos visuales son locales y las rutas son relativas. La interfaz puede funcionar sin conexión; el script de Salesforce requiere red. La sesión usa `sessionStorage` y, con `file://`, también `window.name`: navega en la misma pestaña. La persistencia de archivos locales depende del navegador.
 
-La sesión de demostración usa `sessionStorage`. En `file://` también usa `window.name`, porque el almacenamiento de archivos no se comparte de forma fiable entre páginas. Navega en la **misma pestaña**. La sesión es de demostración y su persistencia depende del navegador. No utilices credenciales reales.
+**Para comprobar el envío real a Data 360, usa la versión HTTPS de GitHub Pages.** El funcionamiento del SDK, sus cookies y la aceptación del origen `file://` no están garantizados. No hay un simulador de eventos local.
 
-## Publicar en GitHub Pages
+## Copiar y publicar en GitHub Pages
 
-1. Sube el contenido de esta carpeta a un repositorio tuyo, con `index.html` en la raíz. Incluye `assets/`, `js/` y `.nojekyll`.
-2. En el repositorio, abre **Settings → Pages → Build and deployment**.
-3. Selecciona **Deploy from a branch**, tu rama y la carpeta **/ (root)**. Guarda.
-4. Abre la URL HTTPS que GitHub muestre al finalizar el despliegue.
+1. Abre [el repositorio base](https://github.com/carlosortegatoro/eliteoct) y pulsa **Fork** para crear tu copia.
+2. Comprueba que `index.html`, `login.html`, `producto.html`, `assets/`, `js/` y `.nojekyll` están en la raíz de tu repositorio.
+3. Configura el tag de tu org como se explica a continuación, antes de hacer las pruebas de medición.
+4. Abre **Settings → Pages → Build and deployment**.
+5. Selecciona **Deploy from a branch**, la rama `main` y **/ (root)**. Guarda.
+6. Espera a que termine el despliegue y abre la URL HTTPS que muestra GitHub.
 
-Las rutas relativas funcionan también bajo `https://USUARIO.github.io/REPOSITORIO/`. No necesitas Node ni ejecutar comandos para usar o publicar la tienda. Estos archivos están preparados para publicar; no se ha creado ni publicado ningún repositorio automáticamente.
+Las rutas funcionan bajo `https://USUARIO.github.io/REPOSITORIO/`. No necesitas Node ni comandos para publicar o usar la tienda. No subas solamente el ZIP: Pages necesita los archivos descomprimidos.
 
-## Conectar cada entorno de Data 360
+## Cambiar el conector de Data 360
 
-### 1. Crear el Website Connector y cargar el esquema
+La cabecera `<head>` de **index.html, login.html y producto.html** contiene exactamente este tag:
 
-En **Data 360 Setup → Websites & Mobile Apps**, crea un conector de tipo **Website**. Carga `salesforce/web-connector-schema.json`: contiene `somaActivity`, `catalog`, `cart`, `cartItem`, `identity`, `contactPointEmail` y `consentLog`, con los campos de esta demo.
-
-Este esquema es específico del ejercicio, no una copia completa del esquema recomendado de Salesforce. Si usas un conector existente, **combina** estos eventos/campos con su esquema actual; no elimines ni cambies los campos ya desplegados. Si partes del esquema recomendado, añade `somaActivity`, los campos `attribute…` de catálogo y `email`/`userName` de `identity` que no existan.
-
-### 2. Pegar la URL del SDK
-
-En `js/config.js`, sustituye únicamente:
-
-```javascript
-salesforceSdkUrl: "PON_AQUI_LA_URL_DE_TU_CONECTOR_WEB_DE_DATA360",
+```html
+<script src="https://cdn.c360a.salesforce.com/beacon/c360a/72b03f61-f57d-4065-a05d-7b9ab4a6d8ff/scripts/c360a.min.js"></script>
 ```
 
-por la URL **HTTPS del script CDN** que aparece en **Integration Guide** del conector. No es la URL de tu organización, un endpoint de Ingestion API ni una API key. Este proyecto no necesita secretos.
+Cada alumno debe sustituir el valor de `src` por la URL completa del script CDN proporcionada por **Integration Guide** de su Website Connector. La URL incluida corresponde al conector del ejercicio; cámbiala por la de tu org en las tres páginas antes de probar la medición.
 
-Deja `cookieDomain: ""` para utilizar el dominio actual. No establezcas `github.io` como dominio de cookies. Los repositorios de un mismo `USUARIO.github.io` comparten host: para ejercicios de identidad independientes, es preferible que cada alumno use su propio usuario/dominio o perfil de navegador.
+Desde GitHub:
 
-### 3. Una sola inicialización del sitemap
+1. Abre `index.html` en tu fork y pulsa el lápiz (**Edit this file**).
+2. Localiza el tag anterior dentro de `<head>`.
+3. Cambia solo el valor de `src`, conservando las comillas y `</script>`.
+4. Guarda con **Commit changes**.
+5. Repite en `login.html` y `producto.html`. Debe haber un único tag de Salesforce en cada cabecera y los tres deben apuntar a tu conector.
+6. Espera al nuevo despliegue de Pages y recarga las páginas.
 
-Esta demo usa un **sitemap gestionado localmente**: `tracking.js` carga el CDN, espera `init()`, y ejecuta `initSitemap()` con la configuración de `js/sitemap.js`.
+Usa la URL pública del script que genera tu conector. No es la URL de Salesforce Setup, de tu org ni de Ingestion API. No hacen falta contraseñas, tokens ni claves privadas en este repositorio.
 
-**No subas `js/sitemap.js` al conector ni mantengas otro sitemap con `init()` / `initSitemap()` en el CDN.** Este archivo expone una factoría que utiliza los datos de esta web; no es un script autónomo para subir sin adaptar. Conserva `sitemapOwner: "local"`. Si tu organización gestiona obligatoriamente el sitemap desde Salesforce, necesitarás adaptar este arranque para tener un único responsable y evitar eventos duplicados.
+## Sitemap gestionado por Data Cloud
 
-### 4. Desplegar los Data Streams y mapear los datos
+**Data Cloud inyecta el sitemap a través de la integración del conector.** El repositorio no contiene un sitemap local, ni llama a `init()`, `initSitemap()` o `sendEvent()`. Tampoco contiene `js/config.js`, `js/sitemap.js` o `js/tracking.js`.
 
-Crea Data Streams a partir de ese Website Connector, selecciona los eventos y despliega los streams de **Engagement** y **Profile**. El código no crea conectores, streams, DMOs ni reglas de resolución de identidad.
+Crea o adapta y publica el sitemap en Data Cloud para tu org. Allí se definen la inicialización del SDK, el consentimiento, las páginas, los listeners, los eventos y la identificación por email. Evita inicializaciones duplicadas desde otro código o un tag manager. **Insertar el tag no configura por sí solo los eventos ni el identity del login.**
 
-| Origen | Campo | Destino orientativo |
-| --- | --- | --- |
-| `identity` | `deviceId` | Individual → Individual ID |
-| `identity` | `isAnonymous` | Individual → Is Anonymous |
-| `identity` | `userName` | Individual → External Record ID, si procede en tu modelo |
-| `contactPointEmail` | `deviceId` | Contact Point Email → Contact Point Email ID y Party |
-| `contactPointEmail` | `email` | Contact Point Email → Email Address |
-| `catalog` | `eventId`, `deviceId`, `id` | Product Browse Engagement → ID, Individual, Product |
-| `catalog` | `attributeSku` | Product Browse Engagement → Product SKU, si procede |
-| `somaActivity` | Campos de la actividad | DMO de engagement elegido para el ejercicio |
+La tienda genera parte de su DOM con scripts `defer`. El sitemap inyectado debe esperar a que la página y `window.SomaShop` estén disponibles (por ejemplo, tras `DOMContentLoaded`) antes de leer sus datos o registrar listeners sobre elementos generados.
 
-Mapea también las fechas y los campos que requiera tu modelo. Revisa los nombres de destino y relaciones en tu organización. Para unificar dispositivos o perfiles por email, configura y ejecuta un **Identity Resolution Ruleset** apropiado. Enviar el email por sí solo no demuestra una unificación completada.
+Puntos de integración disponibles para el sitemap remoto:
 
-### 5. Verificar el recorrido real
+| Elemento o dato | Ubicación |
+| --- | --- |
+| Página | `document.body.dataset.page`: `home`, `login` o `product` |
+| Productos | `window.SOMA_PRODUCTS` o `window.SomaShop.products` |
+| Producto actual | `window.SomaShop.currentProduct` (puede ser nulo) |
+| Enlaces de producto | `[data-product-link]` |
+| Filtros | `[data-filter]` |
+| Carrusel | `[data-gallery-index]`, `[data-gallery-step]`; `SomaShop.galleryIndex` |
+| Bolsa | `#add-to-bag`; `SomaShop.quantity` |
+| Enlace al login | `[data-track-login]` |
+| Formulario de login | Evento `submit` de `#login-form`; campo `#email` |
+| Email de sesión | `window.SomaShop.get("email", "")` |
+| Cambio de usuario | `#change-user` |
 
-Abre la versión HTTPS, acepta la medición y visita un producto. Entra con un email ficticio; después visita otro producto.
+El login guarda el email normalizado en la sesión de demostración y deja que el evento `submit` se propague. El sitemap remoto debe capturar un login válido y enviar el perfil según el esquema de tu conector. También debe gestionar la identidad del SDK al cambiar de usuario; el botón de la web solo limpia la sesión de demostración. La web no llama al SDK ni controla su consentimiento.
 
-- **Ver actividad** debe indicar `SDK inicializado`. Los registros `Preparado` son los payloads en `onActionEvent`, antes del transporte; no prueban recepción.
-- En DevTools → **Network**, comprueba la carga del CDN y las solicitudes del SDK a Salesforce. Revisa los errores de red, consentimiento, cookies, dominio/origen y bloqueadores.
-- Comprueba en los **Data Streams / Data Explorer** la llegada de `catalog`, `somaActivity`, `identity` y `contactPointEmail` con el mismo `deviceId`, y posteriormente sus mapeos.
-- Si aparece un error del SDK, corrige la configuración y recarga. No se cambia silenciosamente a simulación cuando falla un CDN configurado.
+## Esquema, streams y comprobación
 
-Sin la URL del conector y acceso a una organización no se puede verificar la ingestión real ni validar el esquema mediante su importación. El visor nunca afirma que Salesforce ha recibido un evento.
+`salesforce/web-connector-schema.json` es un **ejemplo de esquema** para el ejercicio: contiene `somaActivity`, `catalog`, `cart`, `cartItem`, `identity`, `contactPointEmail` y `consentLog`. Adáptalo a los eventos del sitemap que publiques en Data Cloud. El archivo no genera eventos ni configura automáticamente la org.
 
-## Sitemap y eventos para los alumnos
+1. Configura tu Website Connector y su esquema. Si reutilizas uno, conserva sus eventos y campos existentes.
+2. Publica el sitemap remoto con las páginas, eventos e identidad que quieras medir. Los nombres y tipos de los campos deben coincidir con el esquema.
+3. Crea y despliega los Data Streams correspondientes y configura sus mapeos a DMO.
+4. Abre tu tienda por HTTPS y aplica el consentimiento definido en tu integración.
+5. En DevTools → **Network**, comprueba el script CDN y las solicitudes del SDK. Revisa **Console** si faltan eventos.
+6. Visita Home, un producto, cambia su imagen, añade a la bolsa y envía el login con un email de prueba.
+7. Comprueba en Data 360 la recepción de los eventos que hayas configurado, el email y su relación con el identificador del dispositivo. Después verifica mapeos y, si corresponde, resolución de identidad.
 
-La instrumentación está centralizada en **`js/sitemap.js`**. No hace falta editar la lógica de la tienda para cambiar los eventos.
-
-| Acción | Interacción | Tipo en Data 360 |
-| --- | --- | --- |
-| Abrir Home | `View Home` | `somaActivity` |
-| Pulsar banner | `Discover Collection` | `somaActivity` |
-| Filtrar colección | `Filter Products` + `categoryName` | `somaActivity` |
-| Seleccionar un producto | `Select Product` + `productId` | `somaActivity` |
-| Abrir detalle | `View Catalog Object Detail` + objeto Product | `catalog` |
-| Cambiar imagen | `View Product Image` + `productId`, `imageIndex` | `somaActivity` |
-| Añadir a la bolsa | `Add To Cart` + SKU lógico, precio y cantidad | `cart` y `cartItem` |
-| Pulsar Mi espacio | `Open Login` | `somaActivity` |
-| Abrir Login | `View Login` | `somaActivity` |
-| Enviar el login | `Login` | `somaActivity` |
-| Identificarse | `user.attributes.eventType: identity` | `identity` |
-| Comunicar el email | `user.attributes.eventType: contactPointEmail` | `contactPointEmail` |
-
-El SKU comercial se incluye en los atributos de catálogo; las líneas de bolsa usan el `id` lógico del producto como `catalogObjectId`. Los clics que preceden una navegación dependen del transporte del SDK y del navegador: comprueba su entrega real en Network. La vista de producto se instrumenta además desde la página de destino.
-
-Ejemplo de actividad personalizada:
-
-```javascript
-bridge.send({
-  interaction: {
-    name: "Mi acción de clase",
-    eventType: "somaActivity",
-    productId: "sillon-alba"
-  }
-});
-```
-
-`name` describe la acción. `eventType` debe coincidir con el `developerName` del evento en el esquema. Para añadir un campo, añádelo también a `externalDataTranFields` con el tipo correcto. Los atributos de `catalogObject.attributes` se traducen a `attributeName`, `attributeSku`, etc.; no son los mismos nombres que los campos personalizados directos de `somaActivity`.
-
-El login prepara **dos eventos de perfil**, ligados por el identificador de dispositivo del SDK:
-
-```javascript
-{ user: { attributes: {
-  eventType: "identity", isAnonymous: 0,
-  userName: "alumno@example.com", email: "alumno@example.com"
-} } }
-{ user: { attributes: {
-  eventType: "contactPointEmail", email: "alumno@example.com"
-} } }
-```
-
-No se usa `user.identities.emailAddress`, propio de otros patrones de integración. Se reenvía el perfil conocido al inicializar una nueva página o al consentir después del login; el stream de perfil debe gestionar actualizaciones del mismo dispositivo. El botón **Usar otro email** limpia la sesión identificada y pide al SDK un nuevo identificador anónimo para el siguiente alumno.
-
-La web no autentica a nadie. Solo exige un formato de email válido para poder ilustrar la identificación. El campo contraseña se limpia al enviar; no existe ninguna lectura de su valor para analítica o almacenamiento.
-
-## Consentimiento y límites de la demo
-
-No se inicia la medición hasta aceptar. **Solo necesarias** permite usar todo el catálogo y el login. El pie de página permite cambiar la decisión. Una revocación se transmite al SDK si está iniciado; impide nuevas actividades, pero no borra lo ya recibido por Salesforce. No se reproducen eventos de navegación anteriores al consentimiento. Si te identificas antes de consentir, el perfil se prepara al aceptar posteriormente.
-
-El visor guarda hasta 40 eventos en la sesión de la pestaña, incluidos emails de prueba. Se vacía al cambiar de usuario, cambiar el consentimiento o pulsar **Limpiar visor**. La bolsa, disponibilidad, envío y precios son ficticios. No hay checkout ni pagos.
+Los eventos de navegación, catálogo, bolsa e identidad dependen del sitemap publicado. La bienvenida del login solo confirma la sesión ficticia; una descarga correcta del CDN no demuestra ingestión. La resolución de identidad requiere además la configuración adecuada en la org.
 
 ## Archivos
 
 ```text
-index.html                         Home: banner y seis productos
-producto.html?id=sillon-alba       Detalle reutilizable para los seis productos
-login.html                         Login ficticio
-assets/styles.css                  Diseño adaptable: 3 columnas / 2 filas en escritorio
-assets/images/                     20 ilustraciones SVG locales
-js/products.js                     Catálogo, precios, SKU y descripciones
-js/app.js                          Presentación y sesión de demostración
-js/config.js                       URL del conector que cambia cada alumno
-js/sitemap.js                      Páginas, listeners y payloads de Data 360
-js/tracking.js                     Consentimiento, SDK, simulación y visor
-salesforce/web-connector-schema.json  Esquema de los eventos del ejercicio
-tests/                             Comprobaciones de lógica y DOM
+index.html                           Home y tag del conector
+producto.html                        Detalle reutilizable y tag del conector
+login.html                           Login ficticio y tag del conector
+assets/styles.css                    Diseño adaptable
+assets/images/                       Ilustraciones SVG locales
+js/products.js                       Catálogo, precios, SKU y descripciones
+js/app.js                            Interfaz y sesión de demostración
+salesforce/web-connector-schema.json  Ejemplo de esquema para el ejercicio
+tests/site.test.cjs                   Pruebas de la tienda y del tag
 ```
 
 ## Pruebas opcionales de desarrollo
 
-La tienda no requiere instalaciones. Solo para ejecutar las pruebas de lógica y DOM, instala Node y ejecuta `npm install` y `npm test`. Se usa `jsdom` como dependencia de desarrollo, sin servidor ni peticiones externas. Se comprueban las tres páginas, los seis productos, las rutas de recursos, el carrusel, la sesión, el consentimiento y el contrato de arranque del SDK mediante un doble de prueba.
+La tienda no requiere instalaciones. Para ejecutar las pruebas, instala Node y ejecuta `npm install` y `npm test`. Usan `jsdom` como dependencia de desarrollo y no descargan ni ejecutan el CDN.
 
-Estas pruebas no sustituyen una revisión visual en un navegador ni una comprobación de ingestión con un conector real. La apertura automatizada de `file://` no estaba permitida en el entorno de verificación usado para crear este proyecto.
+Se comprueban los seis productos, carruseles, bolsa, sesión y login, los recursos locales, el tag exacto en las tres cabeceras y la ausencia de instrumentación local. Estas pruebas no verifican el sitemap remoto ni la ingestión en Salesforce.
 
-## Referencias oficiales
+## Referencias
 
-- [Sitemap de Salesforce Interactions SDK](https://developer.salesforce.com/docs/data/salesforce-interactions-sdk/guide/c360a-api-sitemap.html).
-- [Inicialización y consentimiento](https://developer.salesforce.com/docs/data/salesforce-interactions-sdk/guide/c360a-api-initialization.html).
-- [User Data y perfiles](https://developer.salesforce.com/docs/data/salesforce-interactions-sdk/guide/c360a-api-user-data.html).
-- [Traducción de eventos al esquema del conector](https://developer.salesforce.com/docs/data/salesforce-interactions-sdk/guide/c360a-api-translating-sdk-events-to-web-connector-schemas.html).
-- [Eventos personalizados](https://developer.salesforce.com/docs/data/salesforce-interactions-sdk/guide/c360a-api-custom-events.html).
-- [Configuración, streams y mapeos](https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/integrate-salesforce-interactions-sdk.html).
-
-Los pasos de configuración y la estructura de eventos se han contrastado con estas referencias. La aceptación final del esquema y la ingestión deben comprobarse en el entorno del alumno.
+- [Sitemap de Salesforce Interactions SDK](https://developer.salesforce.com/docs/data/salesforce-interactions-sdk/guide/c360a-api-sitemap.html)
+- [Inicialización y consentimiento](https://developer.salesforce.com/docs/data/salesforce-interactions-sdk/guide/c360a-api-initialization.html)
+- [User Data y perfiles](https://developer.salesforce.com/docs/data/salesforce-interactions-sdk/guide/c360a-api-user-data.html)
+- [Traducción de eventos al esquema](https://developer.salesforce.com/docs/data/salesforce-interactions-sdk/guide/c360a-api-translating-sdk-events-to-web-connector-schemas.html)
